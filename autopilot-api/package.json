@@ -13,8 +13,6 @@
     "axios": "^1.7.7",
     "cors": "^2.8.5",
     "express": "^4.21.1",
-    "msfs-simconnect-api-wrapper": "^4.6.0",
-    "node-simconnect": "^4.0.0",
     "ws": "^8.18.0"
   }
 }

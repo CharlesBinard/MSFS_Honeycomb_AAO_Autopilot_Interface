@@ -1,0 +1,59 @@
+# Ignorer les node_modules
+**/node_modules/
+
+# Ignorer les fichiers de log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignorer les fichiers générés de build ou dist
+build/
+dist/
+
+# Ignorer les fichiers de configuration de l'éditeur
+.idea/
+.vscode/
+*.iml
+
+# Ignorer les fichiers de configuration de TypeScript
+*.tsbuildinfo
+
+# Ignorer les fichiers de configuration de l'environnement
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignorer les fichiers de cache de l'API et du client
+**/.cache/
+**/.parcel-cache/
+
+# Ignorer les dossiers publics compilés
+public/static
+public/asset-manifest.json
+public/service-worker.js
+public/manifest.json
+
+# Ignorer les fichiers de lock
+package-lock.json
+yarn.lock
+
+# Ignorer les fichiers de configuration Docker s'ils existent
+Dockerfile
+docker-compose.yml
+
+# Ignorer les fichiers de couverture de test
+coverage/
+
+# Ignorer les fichiers de cache
+.eslintcache
+.cache/
+
+# Ignorer les fichiers temporaires et divers
+*.log
+*.pid
+*.swp
+
+# Ignorer MacOS .DS_Store files
+.DS_Store
