@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import "./App.css";
 
-// Définir le type des données reçues
+// Définition de l'interface pour les données d'autopilot
 interface AutopilotData {
   altitude: number;
   heading: number;
@@ -11,6 +11,16 @@ interface AutopilotData {
   crs: number;
   mode: string;
 }
+
+const autopilotConfig = {
+  ALT: { key: "altitude", unit: "ft" },
+  HDG: { key: "heading", unit: "°" },
+  IAS: { key: "ias", unit: "kts" },
+  VS: { key: "vertical_speed", unit: "f/m" },
+  CRS: { key: "crs", unit: "°" },
+};
+
+const WEBSOCKET_URL = import.meta.env.WEBSOCKET_URL || "ws://192.168.1.12:8081";
 
 const App: React.FC = () => {
   const [autopilotData, setAutopilotData] = useState<AutopilotData>({
@@ -23,17 +33,19 @@ const App: React.FC = () => {
   });
 
   useEffect(() => {
-    // Se connecter au WebSocket
-    const ws = new WebSocket("ws://localhost:8081"); // Connexion WebSocket
+    const ws = new WebSocket(WEBSOCKET_URL);
 
     ws.onopen = () => {
       console.log("Connecté au serveur WebSocket");
     };
 
     ws.onmessage = (event) => {
-      // Quand on reçoit des données via WebSocket, on les met à jour
-      const data = JSON.parse(event.data);
-      setAutopilotData(data);
+      try {
+        const data = JSON.parse(event.data);
+        setAutopilotData(data);
+      } catch (error) {
+        console.error("Erreur de parsing JSON:", error);
+      }
     };
 
     ws.onclose = () => {
@@ -41,35 +53,28 @@ const App: React.FC = () => {
     };
 
     return () => {
-      ws.close(); // Fermer la connexion WebSocket quand le composant est démonté
+      ws.close();
     };
   }, []);
 
   const renderDataValue = useCallback(() => {
-    switch (autopilotData.mode) {
-      case "ALT":
-        return `${autopilotData.altitude} ft`;
-      case "HDG":
-        return `${autopilotData.heading}°`;
-      case "IAS":
-        return `${autopilotData.ias} kts`;
-      case "VS":
-        return `${autopilotData.vertical_speed}°`;
-      case "CRS":
-        return `${autopilotData.crs}°`;
-      default:
-        return "--";
+    const config =
+      autopilotConfig[autopilotData.mode as keyof typeof autopilotConfig];
+    if (config) {
+      return `${autopilotData[config.key as keyof AutopilotData]} ${
+        config.unit
+      }`;
     }
+    return "--";
   }, [autopilotData]);
 
   const otherModes = useMemo(() => {
-    return [
-      { title: "ALT", value: `${autopilotData.altitude} ft ` },
-      { title: "HDG", value: `${autopilotData.heading}°` },
-      { title: "IAS", value: `${autopilotData.ias} kts` },
-      { title: "VS", value: `${autopilotData.vertical_speed}°` },
-      { title: "CRS", value: `${autopilotData.crs}°` },
-    ];
+    return Object.entries(autopilotConfig).map(([mode, config]) => ({
+      title: mode,
+      value: `${autopilotData[config.key as keyof AutopilotData]} ${
+        config.unit
+      }`,
+    }));
   }, [autopilotData]);
 
   const renderDataTitle = useMemo(
@@ -79,17 +84,18 @@ const App: React.FC = () => {
 
   return (
     <div className="app">
+      {/* Affichage du mode sélectionné */}
       <motion.h1
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="selected-mode"
       >
-        {autopilotData.mode}:{" "}
+        {renderDataTitle}:{" "}
         <span className="mode-value">{renderDataValue()}</span>
       </motion.h1>
 
-      {/* Autres modes en bas */}
+      {/* Affichage des autres modes */}
       <motion.div
         className="other-modes"
         initial={{ opacity: 0 }}
