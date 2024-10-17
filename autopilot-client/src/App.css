@@ -1,19 +1,35 @@
-.selected-mode {
-  font-size: 5rem; /* Taille plus grande */
-  font-weight: bold;
-}
-
-.other-modes {
+.app {
   display: flex;
-  flex-direction: row;
-  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #333;
+  color: #fff;
 }
 
-.mode-item {
-  font-size: 2rem;
+.dial-container-vertical {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.dial-item-vertical {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
+  padding: 10px;
   background-color: #424242;
-  padding: 5px;
-  border-radius: 5px;
+  border-radius: 10px;
+  font-size: 1.5rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.dial-item-vertical.selected {
+  background-color: #f39c12;
+  font-size: 1.8rem;
+  font-weight: bold;
 }
 
 .mode-title {
@@ -22,15 +38,4 @@
 
 .mode-value {
   font-weight: normal;
-}
-
-.app {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
 }
