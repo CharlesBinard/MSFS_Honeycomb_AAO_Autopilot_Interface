@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Autopilot Display</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f4f4f4;
+      }
+      .display {
+        text-align: center;
+      }
+      h1 {
+        font-size: 3rem;
+        margin: 0;
+        color: #333;
+      }
+      .value {
+        font-size: 5rem;
+        margin: 0;
+        color: #007bff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="display">
+      <h1 id="bugTitle">No Bug Selected</h1>
+      <p class="value" id="bugValue">--</p>
+    </div>
+
+    <script>
+      const socket = new WebSocket("ws://localhost:8080");
+
+      socket.onmessage = function (event) {
+        const data = JSON.parse(event.data);
+        const bugTitle = document.getElementById("bugTitle");
+        const bugValue = document.getElementById("bugValue");
+
+        const { selectedBug, autopilotData } = data;
+
+        // Mettre à jour l'affichage en fonction du SELECTED_BUG
+        bugTitle.textContent = selectedBug;
+
+        switch (selectedBug) {
+          case "ALTITUDE_BUG_SELECT":
+            bugValue.textContent = autopilotData.altitude + " ft";
+            break;
+          case "HEADING_BUG_SELECT":
+            bugValue.textContent = autopilotData.heading + "°";
+            break;
+          case "AIRSPEED_BUG_SELECT":
+            bugValue.textContent = autopilotData.speed + " kts";
+            break;
+          case "VSI_BUG_SELECT":
+            bugValue.textContent = autopilotData.obs + "°";
+            break;
+          case "VOR_OBS":
+            bugValue.textContent = autopilotData.crs + "°";
+            break;
+          default:
+            bugValue.textContent = "--";
+        }
+      };
+
+      socket.onerror = function (error) {
+        console.error("Erreur WebSocket:", error);
+      };
+    </script>
+  </body>
+</html>

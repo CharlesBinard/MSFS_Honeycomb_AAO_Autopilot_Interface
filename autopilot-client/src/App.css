@@ -1,0 +1,36 @@
+.selected-mode {
+  font-size: 5rem; /* Taille plus grande */
+  font-weight: bold;
+}
+
+.other-modes {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.mode-item {
+  font-size: 2rem;
+  background-color: #424242;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.mode-title {
+  font-weight: bold;
+}
+
+.mode-value {
+  font-weight: normal;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
